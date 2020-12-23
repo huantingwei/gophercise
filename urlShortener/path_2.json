@@ -1,0 +1,10 @@
+[
+    {
+      "path": "/io",
+      "url": "https://golang.org/pkg/io/ioutil/"
+    },
+    {
+      "path": "/json",
+      "url": "https://blog.golang.org/json"
+    }
+  ]

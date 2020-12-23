@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"gopkg.in/yaml.v2"
@@ -41,5 +42,24 @@ func YAMLHandler(yml []byte, fallback http.Handler) (http.HandlerFunc, error) {
 		pathUrlMap[v.Path] = v.URL
 	}
 
+	return MapHandler(pathUrlMap, fallback), nil
+}
+
+func JSONHandler(jsonData []byte, fallback http.Handler) (http.HandlerFunc, error) {
+	// parse json file
+	type pathUrl struct {
+		Path string `json:"path"`
+		URL  string `json:"url"`
+	}
+	var pathUrls []pathUrl
+	err := json.Unmarshal(jsonData, &pathUrls)
+	if err != nil {
+		return nil, err
+	}
+	// convert to map[string]string
+	pathUrlMap := map[string]string{}
+	for _, v := range pathUrls {
+		pathUrlMap[v.Path] = v.URL
+	}
 	return MapHandler(pathUrlMap, fallback), nil
 }
